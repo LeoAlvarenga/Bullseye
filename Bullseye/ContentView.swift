@@ -11,14 +11,29 @@ import SwiftUI
 struct ContentView: View {
     
     @State var alertIsVisible: Bool = false
-    @State var knocking: Bool = false
+    @State var sliderValue: Double = 50.0
     
     var body: some View {
         VStack {
             VStack {
-                Text("Welcome to my first app!")
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color.green)
+                Spacer()
+                //Target Row
+                HStack {
+                    Text("Put the bullseye as colse as you can to:")
+                    Text(/*@START_MENU_TOKEN@*/"100"/*@END_MENU_TOKEN@*/)
+                }
+                Spacer()
+                
+                // Slider Row
+                HStack {
+                    Text("1")
+                    Slider(value: self.$sliderValue, in: 1...100)
+                    Text("100")
+                }
+                .padding(.horizontal, 10)
+                Spacer()
+                
+                // Button Row
                 Button(action: {
                     consoleLogging(value: "Button pressed!")
                     self.alertIsVisible = true
@@ -27,18 +42,30 @@ struct ContentView: View {
                 }
                 .alert(isPresented: $alertIsVisible) { () ->
                     Alert in
-                    return Alert(title: Text("Hello There!"), message: Text("This is my first pop-up!"), dismissButton: .default(Text("Awesome!"))
+                    var roundedValue: Int = Int(self.sliderValue.rounded())
+                    return Alert(title: Text("Hello There!"), message: Text("The slider's value is \(roundedValue)"), dismissButton: .default(Text("Awesome!"))
                     )
                 }
-            }
-            Button(action: {
-                consoleLogging(value: "knocking")
-                self.knocking = true
-            }) {
-                Text("Knock, Knock!")
-            }
-            .alert(isPresented: $knocking) { () -> Alert in
-                return Alert(title: Text("Who's There?"), message: Text("A Swift developer!"), dismissButton: .default(Text("Good one!")))
+                Spacer()
+                
+                // Score Row
+                HStack {
+                    Button(action: {}) {
+                        Text("Start over")
+                    }
+                    Spacer()
+                    Text("Score:")
+                    Text("999")
+                    Spacer()
+                    Text("Round")
+                    Text("999")
+                    Spacer()
+                    Button(action: {}) {
+                        Text("Info")
+                    }
+                }
+                .padding(.bottom, 20)
+                .padding(.horizontal, 10)
             }
         }
     }
@@ -46,7 +73,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().previewLayout(.fixed(width: 896, height: 414))
     }
 }
 
