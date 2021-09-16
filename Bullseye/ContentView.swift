@@ -12,6 +12,7 @@ struct ContentView: View {
     
     @State var alertIsVisible: Bool = false
     @State var sliderValue: Double = 50.0
+    @State var target: Int = Int.random(in: 1...100)
     
     var body: some View {
         VStack {
@@ -20,7 +21,7 @@ struct ContentView: View {
                 //Target Row
                 HStack {
                     Text("Put the bullseye as colse as you can to:")
-                    Text(/*@START_MENU_TOKEN@*/"100"/*@END_MENU_TOKEN@*/)
+                    Text("\(self.target)")
                 }
                 Spacer()
                 
@@ -35,7 +36,7 @@ struct ContentView: View {
                 
                 // Button Row
                 Button(action: {
-                    consoleLogging(value: "Button pressed!")
+                    self.consoleLogging(value: "Button pressed!")
                     self.alertIsVisible = true
                 }) {
                     Text(/*@START_MENU_TOKEN@*/"Hit Me!"/*@END_MENU_TOKEN@*/)
@@ -43,7 +44,10 @@ struct ContentView: View {
                 .alert(isPresented: $alertIsVisible) { () ->
                     Alert in
                     var roundedValue: Int = Int(self.sliderValue.rounded())
-                    return Alert(title: Text("Hello There!"), message: Text("The slider's value is \(roundedValue)"), dismissButton: .default(Text("Awesome!"))
+                    return Alert(title: Text("Hello There!"), message: Text(
+                        "The slider's value is \(roundedValue).\n" +
+                        "You scored \(self.pointsForCurrentRound()) points this round."
+                        ), dismissButton: .default(Text("Awesome!"))
                     )
                 }
                 Spacer()
@@ -69,6 +73,15 @@ struct ContentView: View {
             }
         }
     }
+    
+    func pointsForCurrentRound() -> Int {
+        var result: Int = self.target - Int(self.sliderValue)
+        return 100 - Int(result.magnitude)
+    }
+
+    func consoleLogging(value: String) -> Void {
+        print(value)
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -77,6 +90,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-func consoleLogging(value: String) -> Void {
-    print(value)
-}
